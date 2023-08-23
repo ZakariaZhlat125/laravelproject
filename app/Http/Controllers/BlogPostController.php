@@ -75,6 +75,15 @@ class BlogPostController extends Controller
     public function edit(string $id)
     {
         //
+        $user = auth()->user();
+        $post = BlogPost::findOrFail($id);
+
+        if($user->id !==$post->user_id){
+            // abort(403,'Unauthorized action.');
+            session()->flash('error', 'You are not authorized to update this post.');
+            // Redirect back to the referring page or any other page
+            return redirect()->back();
+        }
         return view('posts.edit', ['post' => BlogPost::findOrFail($id)]);
     }
 
@@ -83,17 +92,23 @@ class BlogPostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
-
+        $user = auth()->user();
         $post = BlogPost::findOrFail($id);
+
+        if($user->id !==$post->user_id){
+            abort(403,'Unauthorized action.');
+
+        }
 
         $validated = $request->validate([
             'title' => 'required|max:255',
             'content' => 'required',
         ]);
-
         $post->fill($validated);
+        // $user->blogPosts()->save($post);
+
         $post->save();
+        session()->flash('success', 'Post updated successfully.');
 
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
@@ -104,9 +119,18 @@ class BlogPostController extends Controller
     public function destroy(string $id)
     {
         //
+        $user = auth()->user();
         $post = BlogPost::findOrFail($id);
+        if($user->id !==$post->user_id){
+            // abort(403,'Unauthorized action.');
+            session()->flash('error', 'You are not authorized to update this post.');
+            // Redirect back to the referring page or any other page
+            return redirect()->back();
+        }
+
+
         $post->delete();
-        // session()->flash('status', 'Blog post was deleted !');
+        session()->flash('status', 'Blog post was deleted !');
 
         return redirect()->route('posts.index');
     }

@@ -33,6 +33,17 @@
 @endif
 
 <div class="  mt-3">
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="btn-group" role="group" aria-label="Post Actions">
         <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="btn btn-primary mx-2">Show</a>
         <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-warning mx-2">Update</a>
