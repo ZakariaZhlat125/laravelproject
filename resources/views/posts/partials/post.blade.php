@@ -24,6 +24,7 @@
 @if ($loop->even)
     <div class="bg-white p-3">
         {{ $key }} {{ $post->title }}
+
     </div>
 @else
     <div class="bg-silver p-3">
@@ -36,10 +37,11 @@
         <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="btn btn-primary mx-2">Show</a>
         <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-warning mx-2">Update</a>
 
-       <a> <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger mx-2">Delete</button>
-        </form>
+        <a>
+            <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger mx-2">Delete</button>
+            </form>
     </div>
 </div>

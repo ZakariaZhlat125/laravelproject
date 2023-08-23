@@ -43,6 +43,7 @@
 
             <h1>{{ $post['title'] }}</h1>
             <p>{{ $post['content'] }}</p>
+            <p>Author: {{ $post->user->name }}</p>
 
             @isset($post['has_comments'])
                 <div class="alert alert-info">The post has some comments... using isset</div>

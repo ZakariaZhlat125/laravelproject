@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
 
@@ -9,20 +11,21 @@ class BlogPostController extends Controller
 {
 
 
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
+
+
     public function index()
     {
         //
 
         return view('posts.index', ['posts' => BlogPost::all()]);
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -38,6 +41,7 @@ class BlogPostController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user();
 
         // Validate the incoming request data
         $validated = $request->validate([
@@ -49,7 +53,7 @@ class BlogPostController extends Controller
         $post = new BlogPost();
         $post->title = $validated['title'];
         $post->content = $validated['content'];
-        $post->save();
+        $user->blogPosts()->save($post);
 
         // Redirect to the newly created post's show page
         return redirect()->route('posts.show', ['post' => $post->id]);
@@ -107,5 +111,3 @@ class BlogPostController extends Controller
         return redirect()->route('posts.index');
     }
 }
-
-
